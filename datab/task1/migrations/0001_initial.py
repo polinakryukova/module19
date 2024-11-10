@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                 ("age_limited", models.BooleanField(default=False)),
                 (
                     "buyers",
-                    models.ManyToManyField(related_name="games", to="task1.buyer"),
+                    models.ManyToManyField(related_name="games", to="first_task.buyer"),
                 ),
             ],
         ),

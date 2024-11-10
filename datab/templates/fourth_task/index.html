@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Paginator</title>
+</head>
+<body>
+
+    <form method="GET">
+        <label for="items-per-page">Количество постов на странице</label>
+        <select name="items_per_page" id="items-per-page">
+            <option value="2" {% if request.GET.items_per_page == '2' %}selected{% endif %}>2</option>
+            <option value="5" {% if request.GET.items_per_page == '5' %}selected{% endif %}>5</option>
+            <option value="8" {% if request.GET.items_per_page == '8' %}selected{% endif %}>8</option>
+        </select>
+        <button type="submit">Применить</button>
+
+    </form>
+
+    {% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.items_per_page %}&items_per_page={{ request.GET.items_per_page }}{% endif %}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+    {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#"> {{ i }}</a>
+            </li>
+        {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}{% if request.GET.items_per_page %}&items_per_page={{ request.GET.items_per_page }}{% endif %}">{{ i }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.items_per_page %}&items_per_page={{ request.GET.items_per_page }}{% endif %}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</nav>
+
+<div class="row">
+    {% for post in page_obj %}
+    <div class="col-md-4">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p>{{ post.created_at }}</p>
+    </div>
+    {% endfor %}
+</div>
+</body>
+</html>
